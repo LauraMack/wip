@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import SearchBar from "./Searchbar";
@@ -7,23 +7,62 @@ import SearchResults from "./SearchResults";
 const Homepage = () => {
   const key = process.env.REACT_APP_CLIENT_ID;
   const [search, setSearch] = useState("");
-  const [searchResult, setSearchResult] = useState("");
+  const [movies, setMovies] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const [numOfPages, setNumOfPages] = useState([]);
 
   const handleInputSearch = (ev) => {
     setSearch(ev.target.value);
   };
 
+  const handlePageChange = (pageNumber) => {
+    fetch(
+      `http://www.omdbapi.com/?s=${search}&apikey=${key}&type=movie&page=${pageNumber}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(movies);
+        setMovies(data.Search);
+        setTotalResults(data.totalResults);
+      });
+  };
+
   const handleSearch = (ev) => {
     if (ev.key === "Enter") {
-      fetch(`http://www.omdbapi.com/?s=${search}&apikey=${key}`)
+      fetch(`http://www.omdbapi.com/?s=${search}&apikey=${key}&type=movie`)
         .then((res) => res.json())
         .then((data) => {
-          setSearchResult(data.Search);
+          setMovies(data.Search);
+          setTotalResults(data.totalResults);
         });
     }
   };
 
-  console.log(searchResult);
+  let numberOfPages = Math.ceil(totalResults / 10);
+  const pagesArray = [];
+  for (let i = 1; i <= numberOfPages; i++) {
+    let active = currentPage === i ? "active" : "";
+    pagesArray.push(
+      <PageButton
+        key={i}
+        onClick={() => {
+          handlePageChange(i);
+        }}
+      >
+        {i}
+      </PageButton>
+    );
+  }
+
+  const handleMorePages = () => {
+    if (totalResults !== 0) {
+      let currentPages = numOfPages.length;
+      let newPagesNumber = currentPages + 3;
+      let morePages = pagesArray.slice(0, newPagesNumber);
+    }
+  };
+
   return (
     <Wrapper>
       <Title>Homepage</Title>
@@ -32,8 +71,8 @@ const Homepage = () => {
         handleSearch={handleSearch}
       />
       <Div>
-        {searchResult &&
-          searchResult.map((movie) => {
+        {movies &&
+          movies.map((movie) => {
             const poster = movie.Poster;
             return (
               <Link to={`/movie-details/${movie.imdbID}`}>
@@ -46,6 +85,13 @@ const Homepage = () => {
             );
           })}
       </Div>
+      {movies && totalResults > 10 ? (
+        <Buttondiv>
+          <PageButton>{pagesArray}</PageButton>
+        </Buttondiv>
+      ) : (
+        ""
+      )}
     </Wrapper>
   );
 };
@@ -70,4 +116,23 @@ const Div = styled.div`
   margin: 0 auto;
   margin-top: 50px;
   flex-flow: row wrap;
+`;
+
+const Buttondiv = styled.div`
+  margin-top: 100px;
+  width: 1000px;
+  height: 100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const PageButton = styled.button`
+  margin: 10px;
+  margin-top: 40px;
+  border-style: none;
+  background: transparent;
+  color: #faf9f0;
+  cursor: pointer;
 `;

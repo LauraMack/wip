@@ -6,7 +6,7 @@ const MovieDetails = () => {
   const [details, setDetails] = useState("");
   const key = process.env.REACT_APP_CLIENT_ID;
   useEffect(() => {
-    fetch(`http://www.omdbapi.com/?i=${id}&apikey=${key}`)
+    fetch(`http://www.omdbapi.com/?i=${id}&apikey=${key}&plot=full`)
       .then((res) => res.json())
       .then((data) => {
         setDetails(data);
