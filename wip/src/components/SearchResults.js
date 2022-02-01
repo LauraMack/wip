@@ -17,10 +17,16 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 250px;
+  height: 300px;
+  text-align: center;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  margin: 5px;
 `;
 
 const Poster = styled.img`
-  height: 250px;
+  height: 200px;
   margin: 10px;
 `;
 
@@ -29,5 +35,5 @@ const Title = styled.p`
   font-size: 12px;
   width: 160px;
   text-align: center;
-  margin-top: 5px;
+  margin-top: 20px;
 `;

@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const Searchbar = ({ handleInputSearch, handleSearch }) => {
+const Searchbar = ({ handleInputSearch, handleSearch, search, setSearch }) => {
   return (
-    <div>
+    <Wrapper>
       <Input
         onChange={handleInputSearch}
         onKeyPress={handleSearch}
         placeholder="Search for a flick"
         type="text"
+        value={search}
       ></Input>
-    </div>
+    </Wrapper>
   );
 };
 
 export default Searchbar;
+
+const Wrapper = styled.div`
+  margin-top: 50px;
+`;
 
 const Input = styled.input`
   display: block;

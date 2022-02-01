@@ -4,14 +4,17 @@ import styled from "styled-components";
 import Homepage from "./components/Homepage";
 import SearchResults from "./components/SearchResults";
 import GlobalStyles from "./components/GlobalStyles";
-import Searchbar from "./components/Searchbar";
 import MovieDetails from "./components/MovieDetails";
+import Header from "./components/Header";
+import Signin from "./components/Signin";
+import backgroundImage from "./assets/background-image6.png";
 
 const App = () => {
   return (
     <Router>
+      {/* <Header /> */}
+      <GlobalStyles />
       <Main>
-        <GlobalStyles />
         <Switch>
           <Route exact path="/">
             <Homepage />
@@ -21,6 +24,9 @@ const App = () => {
           </Route>
           <Route exact path="/movie-details/:id">
             <MovieDetails />
+          </Route>
+          <Route exact path="/signin">
+            <Signin />
           </Route>
         </Switch>
       </Main>
@@ -32,7 +38,12 @@ export default App;
 
 const Main = styled.div`
   display: flex;
-  height: 200vh;
+  height: 240vh;
   width: 100vw;
   margin: 0px;
+  background-image: url(${backgroundImage});
+  background-size: 600px;
+  background-repeat: repeat;
+  background-position: center;
+  background-size: cover;
 `;

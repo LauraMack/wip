@@ -10,7 +10,15 @@ const Homepage = () => {
   const [movies, setMovies] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const [numOfPages, setNumOfPages] = useState([]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+      transition: "all 0.5s ease 0s",
+    });
+    setSearch("");
+  }, []);
 
   const handleInputSearch = (ev) => {
     setSearch(ev.target.value);
@@ -25,9 +33,9 @@ const Homepage = () => {
         console.log(movies);
         setMovies(data.Search);
         setTotalResults(data.totalResults);
+        setCurrentPage(pageNumber);
       });
   };
-
   const handleSearch = (ev) => {
     if (ev.key === "Enter") {
       fetch(`http://www.omdbapi.com/?s=${search}&apikey=${key}&type=movie`)
@@ -40,35 +48,31 @@ const Homepage = () => {
   };
 
   let numberOfPages = Math.ceil(totalResults / 10);
+
   const pagesArray = [];
   for (let i = 1; i <= numberOfPages; i++) {
-    let active = currentPage === i ? "active" : "";
     pagesArray.push(
       <PageButton
         key={i}
         onClick={() => {
           handlePageChange(i);
         }}
+        disabled={currentPage === i}
       >
         {i}
       </PageButton>
     );
   }
 
-  const handleMorePages = () => {
-    if (totalResults !== 0) {
-      let currentPages = numOfPages.length;
-      let newPagesNumber = currentPages + 3;
-      let morePages = pagesArray.slice(0, newPagesNumber);
-    }
-  };
+  let shortenedPages = pagesArray.slice(0, 6);
 
   return (
     <Wrapper>
-      <Title>Homepage</Title>
       <SearchBar
         handleInputSearch={handleInputSearch}
         handleSearch={handleSearch}
+        search={search}
+        setSearch={setSearch}
       />
       <Div>
         {movies &&
@@ -87,7 +91,24 @@ const Homepage = () => {
       </Div>
       {movies && totalResults > 10 ? (
         <Buttondiv>
-          <PageButton>{pagesArray}</PageButton>
+          <PreviousButton
+            onClick={() => {
+              handlePageChange(currentPage - 1);
+            }}
+            disabled={currentPage === 1}
+          >
+            &#171;
+          </PreviousButton>
+          <PageButton>{shortenedPages}</PageButton>
+
+          <NextButton
+            onClick={() => {
+              handlePageChange(currentPage + 1);
+            }}
+            disabled={currentPage === shortenedPages.length}
+          >
+            &#187;
+          </NextButton>
         </Buttondiv>
       ) : (
         ""
@@ -116,13 +137,16 @@ const Div = styled.div`
   margin: 0 auto;
   margin-top: 50px;
   flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Buttondiv = styled.div`
   margin-top: 100px;
-  width: 1000px;
+  width: 1200px;
   height: 100px;
   margin: 0 auto;
+  margin-top: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,8 +155,36 @@ const Buttondiv = styled.div`
 const PageButton = styled.button`
   margin: 10px;
   margin-top: 40px;
+  font-size: 16px;
   border-style: none;
   background: transparent;
   color: #faf9f0;
   cursor: pointer;
+  &:disabled {
+    opacity: 0.4;
+  }
+`;
+
+const PreviousButton = styled.button`
+  margin-top: 60px;
+  font-size: 16px;
+  border-style: none;
+  background: transparent;
+  color: #faf9f0;
+  cursor: pointer;
+  &:disabled {
+    opacity: 0.4;
+  }
+`;
+
+const NextButton = styled.button`
+  margin-top: 60px;
+  font-size: 16px;
+  border-style: none;
+  background: transparent;
+  color: #faf9f0;
+  cursor: pointer;
+  &:disabled {
+    opacity: 0.4;
+  }
 `;
