@@ -5,9 +5,8 @@ import Homepage from "./components/Homepage";
 import SearchResults from "./components/SearchResults";
 import GlobalStyles from "./components/GlobalStyles";
 import MovieDetails from "./components/MovieDetails";
-import Header from "./components/Header";
 import Signin from "./components/Signin";
-import backgroundImage from "./assets/background-image6.png";
+import backgroundImage from "./assets/background-image9.png";
 
 const App = () => {
   return (
@@ -38,12 +37,12 @@ export default App;
 
 const Main = styled.div`
   display: flex;
-  height: 240vh;
+  height: 170vh;
   width: 100vw;
   margin: 0px;
   background-image: url(${backgroundImage});
   background-size: 600px;
-  background-repeat: repeat;
+  background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 `;

@@ -66,6 +66,8 @@ const Homepage = () => {
 
   let shortenedPages = pagesArray.slice(0, 6);
 
+  console.log(movies);
+
   return (
     <Wrapper>
       <SearchBar
@@ -99,7 +101,7 @@ const Homepage = () => {
           >
             &#171;
           </PreviousButton>
-          <PageButton>{shortenedPages}</PageButton>
+          {shortenedPages}
 
           <NextButton
             onClick={() => {
